@@ -14,17 +14,11 @@ node('kubeagent') {
             echo lib.gitBranchName()
             echo "-------------------"
 
-            def b = lib.scmBranchDetail()
-
-            echo "scm branch : " + b.branch
-            echo "scm detail: " + b.detail
-
             echo "env.BRANCH_NAME: ${env.BRANCH_NAME}"
             echo "env.GIT_BRANCH: ${env.GIT_BRANCH}"
 
-            sh 'git ls-remote --heads origin | grep $(git rev-parse HEAD) | cut -d / -f 3'
 
-            sh 'printenv'
+            //sh 'printenv'
         }
     }
 }
