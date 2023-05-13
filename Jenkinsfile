@@ -1,8 +1,8 @@
 @Library("jenkins-sharedLib@master") _
 
-def scmBranch = scm.branches.first().getExpandedName(env.getEnvironment())
-def scmBranchDetail = scmBranch.replaceAll('\\*','').replaceAll('/','_').toLowerCase()
-def branchShortname = scmBranch.split('/').size() > 1 ? scmBranch.split('/')[1] : scmBranch
+def getHeadsOrigin () {
+    return sh(script: "git ls-remote --heads origin | grep \$(git rev-parse HEAD) | awk '{print \$2}' | sort -r -V | sed 's@refs/heads/@@'", returnStdout: true,).trim()
+}
 
 node('kubeagent') {
     skipDefaultCheckout()
