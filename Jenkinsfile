@@ -9,7 +9,12 @@ node('kubeagent') {
     stage('Checkout git') {
         container('jnlp'){
             lib.gitCheckout()
-            def b = lib.gitBranchName()
+
+            echo "-------------------"
+            echo lib.gitBranchName()
+            echo "-------------------"
+
+            def b = lib.scmBranchDetail()
 
             echo "scm branch : " + b.branch
             echo "scm detail: " + b.detail
