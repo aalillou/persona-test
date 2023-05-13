@@ -1,4 +1,4 @@
-@Library("jenkins-sharedLib@master") _
+@Library("jenkins-sharedLib@develop") _
 
 def getHeadsOrigin () {
     return sh(script: "git ls-remote --heads origin | grep \$(git rev-parse HEAD) | awk '{print \$2}' | sort -r -V | sed 's@refs/heads/@@'", returnStdout: true,).trim()
