@@ -11,11 +11,7 @@ node('kubeagent') {
             lib.gitCheckout()
 
             echo "-------------------"
-            echo lib.getHeadsOrigin()
-            echo "-------------------"
-
-            echo "-------------------"
-            echo lib.gitBranchName()
+            echo "BranchName:" + lib.gitBranchName()
             echo "-------------------"
 
             echo "env.BRANCH_NAME: ${env.BRANCH_NAME}"
