@@ -1,0 +1,18 @@
+class SprintNummerTask extends DefaultTask {
+    @TaskAction
+    def printSprintNummer() {
+        def project = getProject()
+        println project.hasProperty('sprint-nummer') ? project.property('sprint-nummer') : 0
+    }
+}
+
+class MinorVersieTask extends DefaultTask {
+    @TaskAction
+    def printMinorVersie() {
+        def project = getProject()
+        println project.hasProperty('minor-versie') ? project.property('minor-versie') : 0
+    }
+}
+
+tasks.register('printSprintNummer', SprintNummerTask)
+tasks.register('printMinorVersie', MinorVersieTask)
