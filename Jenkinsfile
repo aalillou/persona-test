@@ -6,24 +6,13 @@ def branchShortname = scmBranch.split('/').size() > 1 ? scmBranch.split('/')[1] 
 
 node('kubeagent') {
     skipDefaultCheckout()
-
-    stage('kaniko') {
-        container('kaniko') {
-            echo "kaniko no checkout"
-            this.workspace = this.pwd()
-        }
-    }
     stage('Checkout git') {
         container('jnlp'){
-            // checkout scm
             lib.gitCheckout()
+            def b = lib.gitBranchName()
 
-            echo "-------------------"
-            echo lib.gitBranchName()
-            echo "-------------------"
-
-            echo "scmBranch : " + scmBranch
-            echo "branchShortname: " + branchShortname
+            echo "scm branch : " + b.branch
+            echo "scm detail: " + b.detail
 
             echo "env.BRANCH_NAME: ${env.BRANCH_NAME}"
             echo "env.GIT_BRANCH: ${env.GIT_BRANCH}"
