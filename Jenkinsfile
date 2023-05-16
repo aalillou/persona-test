@@ -4,7 +4,7 @@ def getHeadsOrigin () {
     return sh(script: "git ls-remote --heads origin | grep \$(git rev-parse HEAD) | awk '{print \$2}' | sort -r -V | sed 's@refs/heads/@@'", returnStdout: true,).trim()
 }
 
-node('kubeagent') {
+node('persona-agent') {
     skipDefaultCheckout()
     stage('Checkout git') {
         container('jnlp'){
