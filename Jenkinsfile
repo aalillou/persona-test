@@ -1,6 +1,6 @@
 @Library("jenkins-sharedLib@develop") _
 
-node('kubeagent') {
+node('persona-agent') {
     skipDefaultCheckout()
     stage('Checkout git') {
         container('jnlp'){
