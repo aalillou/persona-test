@@ -1,24 +1,15 @@
 @Library("jenkins-sharedLib@develop") _
 
+import persona.devops.Git
+import persona.devops.Gradle
+import persona.devops.Docker
+import persona.devops.Version
+
+def scm = new Git(pipeline: this)
+def gradle = new Gradle(pipeline: this)
+def docker = new Docker(pipeline: this)
+
 node('persona-agent') {
     skipDefaultCheckout()
-    stage('Checkout git') {
-        container('jnlp'){
-            lib.gitCheckout()
-
-            echo "-------------------"
-            echo lib.getHeadsOrigin()
-            echo "-------------------"
-
-            echo "-------------------"
-            echo lib.gitBranchName()
-            echo "-------------------"
-
-            echo "env.BRANCH_NAME: ${env.BRANCH_NAME}"
-            echo "env.GIT_BRANCH: ${env.GIT_BRANCH}"
-
-
-            //sh 'printenv'
-        }
-    }
+    scm.checkout()
 }
