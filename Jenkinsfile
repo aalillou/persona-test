@@ -1,25 +1,15 @@
-@Library("jenkins-sharedLib@master") _
+@Library("jenkins-sharedLib@develop") _
 
-def scmBranch = scm.branches.first().getExpandedName(env.getEnvironment())
-def scmBranchDetail = scmBranch.replaceAll('\\*','').replaceAll('/','_').toLowerCase()
-def branchShortname = scmBranch.split('/').size() > 1 ? scmBranch.split('/')[1] : scmBranch
+import persona.devops.Git
+import persona.devops.Gradle
+import persona.devops.Docker
+import persona.devops.Version
 
-node('kubeagent') {
+def scm = new Git(pipeline: this)
+def gradle = new Gradle(pipeline: this)
+def docker = new Docker(pipeline: this)
+
+node('persona-agent') {
     skipDefaultCheckout()
-    stage('Checkout git') {
-        container('jnlp'){
-            lib.gitCheckout()
-            def b = lib.gitBranchName()
-
-            echo "scm branch : " + b.branch
-            echo "scm detail: " + b.detail
-
-            echo "env.BRANCH_NAME: ${env.BRANCH_NAME}"
-            echo "env.GIT_BRANCH: ${env.GIT_BRANCH}"
-
-            sh 'git ls-remote --heads origin | grep $(git rev-parse HEAD) | cut -d / -f 3'
-
-            sh 'printenv'
-        }
-    }
+    scm.checkout()
 }
