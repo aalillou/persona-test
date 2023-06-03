@@ -1,15 +1,28 @@
-plugins {
-    id 'java'
+buildscript {
+    ext {
+        springBootVersion = '3.1.0'
+        lombokVersion = '6.6.1'
+        owaspCheckVersion = '8.2.1'
+        sonarqubeVersion = '4.0.0.2929'
+        openApiGeneratorVersion = '6.4.0'
+        plantuml = '8.0.1'
+        //personaCommonsVersion = project.property('persona-commons-version')
+    }
 }
 
-group 'be.ond.vlaanderen.persona'
-version '1.0-SNAPSHOT'
+plugins {
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
@@ -18,4 +31,16 @@ test {
     useJUnitPlatform()
 }
 
+apply from: 'gradle/version.gradle'
 apply from: "$rootDir/gradle/sprint.gradle"
+
+group 'be.ond.vlaanderen.persona'
+//version '1.0-SNAPSHOT'
+version = loadVersion().getVersion()
+
+
+
+
+
+
+

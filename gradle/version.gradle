@@ -1,0 +1,81 @@
+class ApplicationVersion {
+    Integer sprint
+    Integer minor
+    Boolean release
+
+    ApplicationVersion(Integer sprint, Integer minor, Boolean release) {
+        this.sprint = sprint
+        this.minor = minor
+        this.release = release
+    }
+
+    private String getRelease() {
+        return this.release ? '' : '-SNAPSHOT'
+    }
+
+    String getVersion() {
+        return "$sprint.$minor" + this.getRelease()
+    }
+}
+
+ext.loadVersion = { ->
+
+    def versionPropertiesFile = file('gradle.properties')
+
+    if(!versionPropertiesFile.exists()) {
+        throw new Exception('No version.properties file found')
+    }
+
+    Properties versionProperties = new Properties()
+
+    versionPropertiesFile.withInputStream { stream ->
+        versionProperties.load(stream)
+    }
+    return new ApplicationVersion(versionProperties.'sprint-nummer'.toInteger(),
+            versionProperties.'minor-versie'.toInteger(),
+            versionProperties.release.toBoolean())
+
+}
+
+task sprintVersionUpdate(group: 'versioning', description: 'Bump to next sprint version') {
+    doFirst {
+        def versionFile = file('gradle.properties')
+        ant.propertyfile(file: versionFile) {
+            entry(key: 'sprint-nummer', type: 'int', operation: '+', value: 1)
+            entry(key: 'minor-versie', type: 'int', operation: '=', value: 0)
+        }
+    }
+}
+
+task minorVersionUpdate(group: 'versioning', description: 'Bump to next minor version') {
+    doFirst {
+        def versionFile = file('gradle.properties')
+        ant.propertyfile(file: versionFile) {
+            entry(key: 'minor-versie', type: 'int', operation: '+', value: 1)
+        }
+    }
+}
+
+task releaseVersion(group: 'versioning', description: 'Make the version a release') {
+    doFirst {
+        def versionFile = file('gradle.properties')
+        ant.propertyfile(file: versionFile) {
+            entry(key: 'release', type: 'string', operation: '=', value: 'true')
+        }
+    }
+}
+
+task preReleaseVersion(group: 'versioning', description: 'Make the version a pre release') {
+    doFirst {
+        def versionFile = file('gradle.properties')
+        ant.propertyfile(file: versionFile) {
+            entry(key: 'release', type: 'string', operation: '=', value: 'false')
+        }
+    }
+}
+
+task printVersion(group: 'versioning', description: 'Get the project version') {
+    doLast {
+        println loadVersion().getVersion()
+    }
+}
