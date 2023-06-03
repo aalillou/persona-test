@@ -12,4 +12,10 @@ def docker = new Docker(pipeline: this)
 node('persona-agent') {
     skipDefaultCheckout()
     scm.checkout()
+
+    echo "-------------------"
+    echo "BranchName:" + scm.branchName()
+    echo "env.BRANCH_NAME: ${env.BRANCH_NAME}"
+    echo "-------------------"
+
 }
